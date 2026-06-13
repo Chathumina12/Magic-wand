@@ -86,6 +86,7 @@ namespace Autohand {
         }
 
         private void FixedUpdate() {
+            if(stabCapsule == null) return;
             if(transform.position != lastPos || lastRot != transform.rotation) {
                 frames = 0;
                 lastPos = transform.position;
@@ -98,6 +99,7 @@ namespace Autohand {
         }
 
         protected virtual void CheckStabArea() {
+            if(stabCapsule == null) return;
             Vector3 point1;
             Vector3 point2;
             Vector3 capsuleAxis;
@@ -246,6 +248,7 @@ namespace Autohand {
 
 
         void OnDrawGizmosSelected() {
+            if(stabCapsule == null) return;
             Vector3 point1;
             Vector3 point2;
             Vector3 capsuleAxis;

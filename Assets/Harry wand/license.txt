@@ -1,0 +1,11 @@
+Model Information:
+* title:	Harry Potter's wand
+* source:	https://sketchfab.com/3d-models/harry-potters-wand-b59abd3afc9a4abcbaef893babfc3a47
+* author:	Xeries (https://sketchfab.com/Xeriesart)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Harry Potter's wand" (https://sketchfab.com/3d-models/harry-potters-wand-b59abd3afc9a4abcbaef893babfc3a47) by Xeries (https://sketchfab.com/Xeriesart) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

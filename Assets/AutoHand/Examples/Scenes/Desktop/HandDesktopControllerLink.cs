@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace Autohand {
 
@@ -38,6 +39,10 @@ namespace Autohand {
         Vector3 handRightStartPosition;
         Vector3 handLeftStartPosition;
 
+        private bool isXRActive = false;
+        private bool wasLeftGrabPressedLastFrame = false;
+        private bool wasRightGrabPressedLastFrame = false;
+
         private void Awake() {
             if(handRight != null) {
                 handRight.follow = handRightFollow;
@@ -50,13 +55,30 @@ namespace Autohand {
             }
         }
 
+        private void Start() {
+            var xrManager = UnityEngine.XR.Management.XRGeneralSettings.Instance?.Manager;
+            if (xrManager != null && xrManager.activeLoader != null) {
+                isXRActive = true;
+                Debug.Log("[HandDesktopControllerLink] XR detected! Running in VR mode.");
+            } else {
+                isXRActive = false;
+                Debug.Log("[HandDesktopControllerLink] No XR detected. Running in PC Simulator mode.");
+            }
+        }
+
         void Update() {
-            CheckSelectionInput();
-            CheckMovementInput();
+            if (isXRActive) {
+                UpdateVRTrackingAndInput();
+            } else {
+                CheckSelectionInput();
+                CheckMovementInput();
+            }
         }
 
         void OnGUI() {
-            ShowInputStates();
+            if (!isXRActive) {
+                ShowInputStates();
+            }
         }
 
         void ShowInputStates() {
@@ -193,6 +215,79 @@ namespace Autohand {
             localPos.z = Mathf.Clamp(localPos.z, -halfExtents.z, halfExtents.z);
 
             point.position = box.transform.TransformPoint(localPos);
+        }
+
+        void UpdateVRTrackingAndInput() {
+            // 1. Head tracking
+            InputDevice headDevice = InputDevices.GetDeviceAtXRNode(XRNode.CenterEye);
+            if (headDevice.isValid) {
+                if (headDevice.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 headPos)) {
+                    headCamera.transform.localPosition = headPos;
+                }
+                if (headDevice.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion headRot)) {
+                    headCamera.transform.localRotation = headRot;
+                }
+            }
+
+            // 2. Left Hand tracking & input
+            InputDevice leftDevice = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+            if (leftDevice.isValid) {
+                if (leftDevice.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 leftPos)) {
+                    handLeftFollow.localPosition = leftPos;
+                }
+                if (leftDevice.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion leftRot)) {
+                    handLeftFollow.localRotation = leftRot;
+                }
+
+                // Left hand grab/release input (Trigger or Grip)
+                bool leftGrab = false;
+                leftDevice.TryGetFeatureValue(CommonUsages.gripButton, out leftGrab);
+                if (!leftGrab) {
+                    leftDevice.TryGetFeatureValue(CommonUsages.triggerButton, out leftGrab);
+                }
+
+                if (leftGrab && !wasLeftGrabPressedLastFrame) {
+                    handLeft.Grab();
+                } else if (!leftGrab && wasLeftGrabPressedLastFrame) {
+                    handLeft.Release();
+                }
+                wasLeftGrabPressedLastFrame = leftGrab;
+
+                // Left joystick movement
+                if (leftDevice.TryGetFeatureValue(CommonUsages.primary2DAxis, out Vector2 moveInput)) {
+                    player.Move(moveInput);
+                }
+            }
+
+            // 3. Right Hand tracking & input
+            InputDevice rightDevice = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+            if (rightDevice.isValid) {
+                if (rightDevice.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 rightPos)) {
+                    handRightFollow.localPosition = rightPos;
+                }
+                if (rightDevice.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion rightRot)) {
+                    handRightFollow.localRotation = rightRot;
+                }
+
+                // Right hand grab/release input (Trigger or Grip)
+                bool rightGrab = false;
+                rightDevice.TryGetFeatureValue(CommonUsages.gripButton, out rightGrab);
+                if (!rightGrab) {
+                    rightDevice.TryGetFeatureValue(CommonUsages.triggerButton, out rightGrab);
+                }
+
+                if (rightGrab && !wasRightGrabPressedLastFrame) {
+                    handRight.Grab();
+                } else if (!rightGrab && wasRightGrabPressedLastFrame) {
+                    handRight.Release();
+                }
+                wasRightGrabPressedLastFrame = rightGrab;
+
+                // Right joystick turning
+                if (rightDevice.TryGetFeatureValue(CommonUsages.primary2DAxis, out Vector2 turnInput)) {
+                    player.Turn(turnInput.x);
+                }
+            }
         }
     }
 }

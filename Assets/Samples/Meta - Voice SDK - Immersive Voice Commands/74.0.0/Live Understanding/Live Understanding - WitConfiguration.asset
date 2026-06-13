@@ -26,6 +26,8 @@ MonoBehaviour:
   m_Name: Live Understanding - WitConfiguration
   m_EditorClassIdentifier: 
   _clientAccessToken: JYSZFUVTNXFZ4N3LAHJMDS6JOET2IBVP
+  editorVersionTag: 
+  buildVersionTag: 
   _appInfo:
     name: voicesdk_samples_shapes
     id: 04b6d9fc-60b7-4d9e-8473-9290b9d1243f
@@ -54,6 +56,9 @@ MonoBehaviour:
       - name: color
         id: 629054192387147
       keywords:
+      - keyword: Gray
+        synonyms:
+        - gray
       - keyword: black
         synonyms:
         - black
@@ -123,60 +128,6 @@ MonoBehaviour:
     traits: []
     versionTags: []
     voices:
-    - name: billie
-      locale: en_US
-      gender: female
-      styles: []
-      supported_features: []
-    - name: bru
-      locale: en_US
-      gender: male
-      styles: []
-      supported_features: []
-    - name: dungeon
-      locale: en_US
-      gender: male
-      styles: []
-      supported_features: []
-    - name: jane_austen
-      locale: en_GB
-      gender: female
-      styles: []
-      supported_features: []
-    - name: Maria
-      locale: es_ES
-      gender: female
-      styles:
-      - default
-      - soft
-      - projected
-      - fast
-      - formal
-      supported_features:
-      - style
-      - pitch
-      - speed
-      - sfx
-      - viseme_events
-      - phoneme_events
-      - word_events
-    - name: Skully
-      locale: en_US
-      gender: male
-      styles:
-      - default
-      - soft
-      - projected
-      - fast
-      - formal
-      supported_features:
-      - style
-      - pitch
-      - speed
-      - sfx
-      - viseme_events
-      - phoneme_events
-      - word_events
     - name: wit$British Butler
       locale: en_GB
       gender: male
@@ -682,16 +633,11 @@ MonoBehaviour:
       - viseme_events
       - phoneme_events
       - word_events
-    - name: zach
-      locale: en_US
-      gender: male
-      styles: []
-      supported_features: []
   _configData:
-  - {fileID: -7432470674793020331}
   - {fileID: 5211937784772479919}
   _configurationId: 4e21a24e472ab684e84db753427d5687
-  timeoutMS: 10000
+  _requestType: 0
+  _requestTimeoutMs: 10000
   endpointConfiguration:
     _uriScheme: 
     _authority: 
@@ -704,13 +650,13 @@ MonoBehaviour:
     _event: 
     _converse: 
   isDemoOnly: 1
+  useIntentAttributes: 1
   useConduit: 0
   _manifestLocalPath: 
   excludedAssemblies:
   - Oculus.Voice.Demo, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - Meta.WitAi.Samples, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   relaxedResolution: 0
-  _lastRefreshSeconds: 1704738285.6221778
 --- !u!114 &5211937784772479919
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -359,16 +359,28 @@ namespace Autohand {
                 resetLayerRoutine[hand] = null;
             }
 
-            foreach(var col in grabColliders)
-                hand.HandIgnoreCollider(col, ignore);
-
-            foreach(var grab in grabbableChildren)
-                foreach(var col in grab.grabColliders)
+            foreach(var col in grabColliders) {
+                if (col != null)
                     hand.HandIgnoreCollider(col, ignore);
+            }
 
-            foreach(var grab in grabbableParents)
-                foreach(var col in grab.grabColliders)
-                    hand.HandIgnoreCollider(col, ignore);
+            foreach(var grab in grabbableChildren) {
+                if (grab != null) {
+                    foreach(var col in grab.grabColliders) {
+                        if (col != null)
+                            hand.HandIgnoreCollider(col, ignore);
+                    }
+                }
+            }
+
+            foreach(var grab in grabbableParents) {
+                if (grab != null) {
+                    foreach(var col in grab.grabColliders) {
+                        if (col != null)
+                            hand.HandIgnoreCollider(col, ignore);
+                    }
+                }
+            }
 
             if(!ignoringHand.ContainsKey(hand))
                 ignoringHand.Add(hand, ignore);
@@ -418,14 +430,17 @@ namespace Autohand {
         /// <summary>Resets the physics materials on all the colliders to the given physics material</summary>
         public void SetPhysicMaterial(PhysicMaterial physMat) {
             foreach(var collider in grabColliders) {
-                collider.material = physMat;
+                if (collider != null)
+                    collider.material = physMat;
             }
         }
 
         /// <summary>Resets the physics materials on all the colliders to how it was during last UpdateGrabbableColliderSettings()</summary>
         public void ResetPhysicsMateiral() {
-            foreach(var col in grabColliderMaterials)
-                col.Key.sharedMaterial = col.Value;
+            foreach(var col in grabColliderMaterials) {
+                if (col.Key != null)
+                    col.Key.sharedMaterial = col.Value;
+            }
         }
 
 

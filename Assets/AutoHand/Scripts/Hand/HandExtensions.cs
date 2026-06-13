@@ -9,8 +9,11 @@ namespace Autohand {
 
 
         public static void HandIgnoreCollider(this Hand hand, Collider collider, bool ignore) {
-            for(int i = 0; i < hand.handColliders.Count; i++)
-                Physics.IgnoreCollision(hand.handColliders[i], collider, ignore);
+            if (collider == null) return;
+            for(int i = 0; i < hand.handColliders.Count; i++) {
+                if (hand.handColliders[i] != null)
+                    Physics.IgnoreCollision(hand.handColliders[i], collider, ignore);
+            }
         }
 
 
